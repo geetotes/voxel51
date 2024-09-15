@@ -25,7 +25,7 @@ classes = trained_dataset.default_classes
 trained_dataset.export(
     export_dir="./tmp/yolo",
     dataset_type=fo.types.YOLOv5Dataset,
-    label_field="detections",
+    label_field="segmentations",
     split="train",
     classes=classes,
 )
@@ -45,7 +45,7 @@ untrained_dataset = fo.Dataset.from_dir(
 untrained_dataset.export(
     export_dir="./tmp/yolo",
     dataset_type=fo.types.YOLOv5Dataset,
-    label_field="detections",
+    label_field="segmentations",
     split="val",
     classes=classes,
 )
@@ -56,7 +56,8 @@ trained_dataset.merge_samples(untrained_dataset)
 
 working_dataset = trained_dataset[0:100]
 
-model = YOLO("yolov8n-cls.pt")
+model = YOLO("yolov8n-seg.pt")
+model.train(data="./tmp/yolo/dataset.yaml", epochs=3)
 working_dataset.apply_model(model, label_field="classif")
 
 session = fo.launch_app(working_dataset)
@@ -65,4 +66,5 @@ session = fo.launch_app(working_dataset)
 print(working_dataset)
 
 session.wait()
+
 
