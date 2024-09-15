@@ -56,8 +56,8 @@ trained_dataset.merge_samples(untrained_dataset)
 
 working_dataset = trained_dataset[0:100]
 
-model = YOLO("yolov8n-seg.pt")
-model.train(data="./tmp/yolo/dataset.yaml", epochs=3)
+model = YOLO("yolov8n-cls.pt")
+#model.train(data="./tmp/yolo/dataset.yaml", epochs=3)
 working_dataset.apply_model(model, label_field="classif")
 
 session = fo.launch_app(working_dataset)
